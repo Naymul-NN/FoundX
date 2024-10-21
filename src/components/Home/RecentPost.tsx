@@ -3,12 +3,10 @@ import { Button } from "@nextui-org/button";
 
 import Container from "../ui/container";
 
-export default async function RecentPosts() {
-  const res = await fetch(
-    "http://localhost:5000/api/v1/items?sortBy=-createdAt&limit=9",
-  );
+import { getRecentPosts } from "@/src/services/RecentPosts";
 
-  console.log("data", await res.json());
+export default async function RecentPosts() {
+  const { data: posts } = await getRecentPosts();
 
   return (
     <Container>
@@ -18,9 +16,7 @@ export default async function RecentPosts() {
           A list of items that have been recently found and reported.
         </p>
       </div>
-      <div>
-        <h1>Recent Posts</h1>
-      </div>
+      <div>{posts?.map((item) => <p key={item.id}>{item.title}</p>)}</div>
       <div className="flex justify-center">
         <Button className="rounded-md bg-default-900 text-default" size="md">
           <Link href="/found-items">See All</Link>
